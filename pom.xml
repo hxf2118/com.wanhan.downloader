@@ -5,73 +5,56 @@
 	<groupId>com.wanhan</groupId>
 	<artifactId>com.wanhan.downloader</artifactId>
 	<version>1.0.0</version>
-	<packaging>jar</packaging>
+	<packaging>jar</packaging> 
 
-	<name>com.wanhan.downloader</name>
-
-	<developers>
-		<developer>
-			<name>Mich</name>
-			<email>askxuefeng@gmail.com</email>
-			<organization>iTranswarp</organization>
-			<organizationUrl>http://www.liaoxuefeng.com</organizationUrl>
-		</developer>
+	<developers> 
 	</developers>
 
 	<properties>
 		<!-- source encoding -->
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven.compiler.source>16</maven.compiler.source>
-		<maven.compiler.target>16</maven.compiler.target>
-		<maven.javadoc.failOnError>false</maven.javadoc.failOnError>
-		<java.version>16</java.version>
+		<github.global.server>github</github.global.server> 
 	</properties>
 
 	<dependencies>
-		<dependency>
-			<groupId>commons-logging</groupId>
-			<artifactId>commons-logging</artifactId>
-			<version>1.2</version>
-		</dependency>
+	
 	</dependencies>
-
-	<distributionManagement>
-		<repository>
-			<id>local-repo-release</id>
-			<name>GitHub Release</name>
-			<url>file://${project.basedir}/maven-repo</url>
-		</repository>
-	</distributionManagement>
-
+ 
 	<build>
-		<plugins>
+		<plugins>  
 			<plugin>
-				<artifactId>maven-source-plugin</artifactId>
-				<version>3.2.1</version>
-				<executions>
-					<execution>
-						<id>attach-sources</id>
-						<phase>package</phase>
-						<goals>
-							<goal>jar-no-fork</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>2.8.1</version>
+                <configuration>
+                    <altDeploymentRepository>internal.repo::default::file://${project.build.directory}/mvn-repo</altDeploymentRepository>
+                </configuration>
+            </plugin> 
+			 
 			<plugin>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>3.3.0</version>
-				<executions>
-					<execution>
-						<id>attach-javadocs</id>
-						<phase>package</phase>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
+                <groupId>com.github.github</groupId>
+                <artifactId>site-maven-plugin</artifactId>
+                <version >0.12</version>
+                <configuration>
+                    <message >Maven artifacts for ${project.version}</message>
+                    <noJekyll>true</noJekyll>
+                    <outputDirectory>${project.build.directory}/mvn-repo</outputDirectory><!--本地jar地址-->
+                    <branch>refs/heads/master</branch><!--分支的名称-->
+                    <merge>true</merge>
+                    <includes>
+                        <include>**/*</include>
+                    </includes>
+                    <repositoryName>com.wanhan.downloader</repositoryName><!--对应github上创建的仓库名称 name-->
+                    <repositoryOwner>hxf2118@126.com</repositoryOwner><!--github 仓库所有者即登录用户名-->
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>site</goal>
+                        </goals>
+                        <phase>deploy</phase>
+                    </execution>
+                </executions>
+            </plugin>
+			 
 		</plugins>
 	</build>
-	<url>https://hxf2118.github.io/com.wanhan.downloader/</url>
 </project>
